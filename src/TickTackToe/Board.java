@@ -1,6 +1,6 @@
 package TickTackToe;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * <h1>Board</h1>
@@ -9,48 +9,159 @@ import java.util.Arrays;
 class Board {
 
     // the board in matrix form
+    // BY DEFAULT
     // -1 = empty tile
     // 0 = O player pawn
     // 1 = X player pawn
-    private final int[][] board;
+    protected final int[][] BOARD;
+
+    // the integers which represent the players on the board
+    protected final int PLAYER_X_KEY;
+    protected final int PLAYER_O_KEY;
+    // the integers which represent the empty tiles on the board
+    protected final int EMPTY_TILE_KEY;
+
     // the current turn
     // player X plays on even turns
     // player O plays on odd turns
-    private int turn = 0;
+    protected int turn = 0;
     // the width and height of the board
-    private final int BOARD_DIMENSIONS;
+    protected final int BOARD_DIMENSIONS;
 
     // the singleton instance of the board
-    private static Board board_Instance = null;
+    protected static Board board_Instance = null;
 
     /**
      * <h2>Board Constructor</h2>
      * <p>Called only once to create the singleton of the Board class</p>
      * @param dimension the size of the board
      */
-    private Board(int dimension) {
+    protected Board(int dimension) {
 
         // assigns the board's dimension
         this.BOARD_DIMENSIONS = dimension;
 
+        // assigns the player keys to default of
+        // X = 1
+        // O = 0
+        this.PLAYER_X_KEY = 1;
+        this.PLAYER_O_KEY = 0;
+        // assign the empty tile key to default of
+        // empty = -1
+        this.EMPTY_TILE_KEY = -1;
+
         // creates the board
-        board = new int[BOARD_DIMENSIONS][BOARD_DIMENSIONS];
+        BOARD = new int[BOARD_DIMENSIONS][BOARD_DIMENSIONS];
         // populates the board with empty tiles
-        for (int[] row : board) {
+        for (int[] row : BOARD) {
             Arrays.fill(row, -1);
+        }
+    }
+
+
+    /**
+     * <h2>Board Constructor</h2>
+     * <p>Called only once to create the singleton of the Board class</p>
+     * <p>
+     *     <br>
+     *     Valid Key Combination :
+     *     <br>
+     *     {empty tile key, player O key, player X key}
+     * </p>
+     * <list>
+     *      <li>-1, 0, 1</li>
+     *      <li>0, -1, 1</li>
+     *      <li>0, 1, -1</li>
+     * </list>
+     * @param dimension the size of the board
+     * @param EMPTY_TILE_KEY integer representing empty tiles in the board
+     * @param PLAYER_O_KEY integer representing player X in the board
+     * @param PLAYER_X_KEY integer representing player O in the board
+     */
+    protected Board(int dimension, int EMPTY_TILE_KEY, int PLAYER_O_KEY, int PLAYER_X_KEY) {
+
+        // assigns the board's dimension
+        this.BOARD_DIMENSIONS = dimension;
+
+        // if the player and empty tile keys the same...
+        if (PLAYER_X_KEY == PLAYER_O_KEY || PLAYER_X_KEY == EMPTY_TILE_KEY || PLAYER_O_KEY == EMPTY_TILE_KEY) {
+            // throws an error
+            throw new IllegalArgumentException("PLayer and empty tile keys cannot be identical");
+        }
+
+        // map containing all the valid value for the keys
+        Map<String, Boolean> validKeys = new HashMap<>();
+        // valid key values
+        // {empty tile key, player O key, player X key}
+        validKeys.put("{-1, 0, 1}", true);
+        validKeys.put("{0, -1, 1}", true);
+        validKeys.put("{0, 1, -1}", true);
+
+        // groups the keys inputted by the user in a string
+        String userKeys = String.format("{%s, %s, %s}", EMPTY_TILE_KEY, PLAYER_O_KEY, PLAYER_X_KEY);
+
+        // if the keys inputted by the user are not valid
+        if (!validKeys.containsKey(userKeys)) {
+            // throws an error
+            throw new IllegalArgumentException("Key combination is invalid");
+        }
+
+        // assigns the player keys
+        this.PLAYER_X_KEY = PLAYER_X_KEY;
+        this.PLAYER_O_KEY = PLAYER_O_KEY;
+        // assigns the empty tile key
+        this.EMPTY_TILE_KEY = EMPTY_TILE_KEY;
+
+        // creates the board
+        BOARD = new int[BOARD_DIMENSIONS][BOARD_DIMENSIONS];
+        // populates the board with empty tiles
+        for (int[] row : BOARD) {
+            Arrays.fill(row, EMPTY_TILE_KEY);
         }
     }
 
     /**
      * <h2>getBoardInstance</h2>
+     * <p>Gets the singleton instance of the Board class</p>
      * @param dimension the size of the board
      * @return the singleton of the Board class
      */
-    static Board getBoard_Instance(int dimension) {
+    static Board getBoardInstance(int dimension) {
         // if the singleton hasn't been created yet...
         if(board_Instance == null) {
             // calls the class constructor
             board_Instance = new Board(dimension);
+        }
+
+        // returns the singleton
+        return  board_Instance;
+    }
+
+    /**
+     * <h2>getBoardInstance</h2>
+     * <p>Gets the singleton instance of the Board class</p>
+     * <p>
+     *     <br>
+     *     Valid Key Combination :
+     *     <br>
+     *     {empty tile key, player O key, player X key}
+     * </p>
+     * <list>
+     *      <li>-1, 0, 1</li>
+     *      <li>0, -1, 1</li>
+     *      <li>0, 1, -1</li>
+     * </list>
+     * @param dimension the size of the board
+     * @param EMPTY_TILE_KEY integer representing empty tiles in the board
+     * @param PLAYER_O_KEY integer representing player X in the board
+     * @param PLAYER_X_KEY integer representing player O in the board
+     * @return the singleton of the Board class
+     */
+    static Board getBoardInstance(int dimension, int EMPTY_TILE_KEY, int PLAYER_O_KEY, int PLAYER_X_KEY) {
+        // if the singleton hasn't been created yet...
+        if(board_Instance == null) {
+            // calls the class constructor
+            board_Instance = new Board(dimension, EMPTY_TILE_KEY, PLAYER_O_KEY, PLAYER_X_KEY);
         }
 
         // returns the singleton
@@ -66,43 +177,55 @@ class Board {
     }
 
     /**
+     * <h2>resetTurns</h2>
+     * <p>Resets the turn to 0</p>
+     */
+    public void resetTurns() {
+        turn = 0;
+    }
+
+    /**
      * <h2>curPlayer</h2>
      * <p>Determines the current player to display him under string form</p>
      * @return the current player in string form
      */
     public String curPlayer() {
         // determines the current player
-        return curPlayerTurn() == 1 ? "X" : "O";
+        return curPlayerTurn() == PLAYER_X_KEY ? "X" : "O";
     }
 
     /**
      * <h2>curPlayerTurn</h2>
      * <p>Determines whose player it is the turn to play</p>
-     * @return
+     * <list>
+     *     <li>0 : player O's turn (odd turns)</li>
+     *     <li>1 : player X's turn (even turns)</li>
+     * </list>
+     * @return the player whose turn it is to play
      */
     private int curPlayerTurn() {
         // it is X player's turn
         if (turn % 2 == 0) {
-            return 1;
+            return PLAYER_X_KEY;
         }
         // it is O player's turn
         else {
-            return  0;
+            return PLAYER_O_KEY;
         }
     }
 
     /**
-     * <h2>isPLayableTile</h2>
+     * <h2>isPlayableTile</h2>
      * <p>Determines whether or not a tile on the board is playable (if it is empty)</p>
      * @param x the x-coordinates of the tile
      * @param y the y-coordinates of the tile
-     * @return wether or not the tile is playable
+     * @return whether the tile is playable
      */
     public boolean isPlayableTile(int x, int y) {
         // tries and access the tile
         try {
             // if the tile is empty it is playable
-            return board[x][y] == -1;
+            return BOARD[x][y] == EMPTY_TILE_KEY;
         } catch (IndexOutOfBoundsException e) {
             // if there was an error in specifying the coordinates
             // the tile is by default unplayable
@@ -120,15 +243,15 @@ class Board {
     private String convertTile(int x, int y) {
 
         // tile is empty
-        if (board[y][x] == -1) {
+        if (BOARD[y][x] == EMPTY_TILE_KEY) {
             return "_";
         }
         // tile belongs to player O
-        else if(board[y][x] == 0) {
+        else if(BOARD[y][x] == PLAYER_O_KEY) {
             return "O";
         }
         // tile belongs to player X
-        else if(board[y][x] == 1){
+        else if(BOARD[y][x] == PLAYER_X_KEY){
             return "X";
         }
         // tile is invalid (does not belong to any player and is not empty)
@@ -136,6 +259,8 @@ class Board {
             // displays an error message
             throw new IllegalArgumentException("Specified tile is invalid");
         }
+
+        // return Integer.toString(BOARD[y][x]);
     }
 
     /**
@@ -148,7 +273,7 @@ class Board {
         // if the tile is empty...
         if (isPlayableTile(x, y)){
             // places the corresponding player tile
-            board[x][y] = curPlayerTurn();
+            BOARD[x][y] = curPlayerTurn();
             // and moves on to the next turn
             nextTurn();
         }
@@ -157,21 +282,23 @@ class Board {
     /**
      * <h2>hasPlayerXWon</h2>
      * <p>Determines whether or not the player X has made a valid alignment</p>
+     * @param winingPlayer the wining player in integer form
      * @return whether player X has won
      */
-    public boolean hasPlayerXWon() {
+    public boolean hasPlayerXWon(int winingPlayer) {
         // checks for win conditions for player X
-        return winCondition() == 1;
+        return winingPlayer == PLAYER_X_KEY;
     }
 
     /**
      * <h2>hasPlayerOWon</h2>
      * <p>Determines whether or not the player O has made a valid alignment</p>
+     * @param winingPlayer the wining player in integer form
      * @return whether player O has won
      */
-    public boolean hasPlayerOWon() {
+    public boolean hasPlayerOWon(int winingPlayer) {
         // checks for win conditions for player O
-        return winCondition() == 0;
+        return winingPlayer == PLAYER_O_KEY;
     }
 
     /**
@@ -181,11 +308,11 @@ class Board {
      */
     public boolean hasSpaceLeft() {
         // loops through each row of the board...
-        for (int[] row : board) {
+        for (int[] row : BOARD) {
             // looks through each tile of that row...
             for (int tile : row) {
-                // if the tile contains a -1, it is empty
-                if (tile == -1) {
+                // if the tile contains the empty tile key, it is empty
+                if (tile == EMPTY_TILE_KEY) {
                     return true;
                 }
             }
@@ -205,149 +332,198 @@ class Board {
      * </ul>
      * @return which player has won or if none has won
      */
-    private int winCondition() {
+    public int winingPlayer() {
         // gets wining conditions
-        int rowWining =rowWiningCondition();
-        int columnWining = columnWinConditions();
-        int diag1Wining = downwardDiagonalWinConditions();
-        int diag2Wining = upwardDiagonalWinConditions();
+        int rowWining =     isWining(       rowScore(true));
+        int columnWining =  isWining(    columnScore(true));
+        int diag1Wining =   isWining(  downDiagScore(true));
+        int diag2Wining =   isWining(    upDiagScore(true));
+
+        // whether X is wining along the rows / columns / upwards or downward diagonals
+        boolean XRowWining      = rowWining     == PLAYER_X_KEY;
+        boolean XColumnWining   = columnWining  == PLAYER_X_KEY;
+        boolean XDiag1Wining    = diag1Wining   == PLAYER_X_KEY;
+        boolean XDiag2Wining    = diag2Wining   == PLAYER_X_KEY;
+
+        // whether X is wining along the rows / columns / upwards or downward diagonals
+        boolean ORowWining      = rowWining     == PLAYER_O_KEY;
+        boolean OColumnWining   = columnWining  == PLAYER_O_KEY;
+        boolean ODiag1Wining    = diag1Wining   == PLAYER_O_KEY;
+        boolean ODiag2Wining    = diag2Wining   == PLAYER_O_KEY;
 
         // checks whether player X has won
-        if ((rowWining == 1) || (columnWining == 1) || (diag1Wining == 1) || (diag2Wining == 1)) {
-            return 1;
+        if (XRowWining || XColumnWining || XDiag1Wining || XDiag2Wining) {
+            return PLAYER_X_KEY;
         }
         // checks whether player O has won
-        if ((rowWining == 0) || (columnWining == 0) || (diag1Wining == 0) || (diag2Wining == 0)) {
-            return 0;
+        if (ORowWining || OColumnWining || ODiag1Wining || ODiag2Wining) {
+            return PLAYER_O_KEY;
         }
 
         // no player has won yet
-        return -1;
+        return EMPTY_TILE_KEY;
     }
 
     /**
-     * <h2>rowWiningCondition</h2>
-     * <p>Checks weather a player has won along the rows</p>
-     * @return which player has won or if none has won
+     * <h2>isWInning</h2>
+     * <p>Checks whether a player is wining based on his specified score</p>
+     * @param score the player's score along the rows / columns / up or down diagonal
+     * @return whether a player has won
      */
-    private int rowWiningCondition() {
-        // Check rows for alignment
-        for (int[] row : board) {
+    private int isWining(int[] score) {
 
-            // resets the row sum for each new row
-            int rowSum = 0;
-            // verifies that no empty tiles are counted in the sum
-            int hasNoEmpty = 1;
+        // gets the maxim score
+        Arrays.sort(score);
+        final int MAX_SCORE = score[score.length - 1];
+
+        // if player X is wining
+        if (MAX_SCORE == BOARD_DIMENSIONS * PLAYER_X_KEY) {
+            return PLAYER_X_KEY;
+        }
+        // if player O is wining
+        if (MAX_SCORE == BOARD_DIMENSIONS * PLAYER_O_KEY) {
+            return PLAYER_O_KEY;
+        }
+
+        // no player has won yet
+        return EMPTY_TILE_KEY;
+    }
+
+
+    /**
+     * <h2>rowScore</h2>
+     * <p>The player's score along the rows</p>
+     * @param considerEmpty whether the method considers empty tiles or not
+     * @return the score of the player along the rows
+     */
+    protected int[] rowScore(boolean considerEmpty) {
+
+        // how close the player is to wining on each row
+        final int[] ROW_SCORE = new int[BOARD_DIMENSIONS];
+        Arrays.fill(ROW_SCORE, 0);
+
+        // verifies there are no empty tiles in the row
+        int hasNoEmpty = 1;
+
+        // Check rows for alignment
+        for (int i = 0; i < BOARD_DIMENSIONS; i++) {
 
             // adds up every tile of the row
-            for (int tile: row) {
-                rowSum = tile != -1 ? rowSum + tile : (hasNoEmpty = 0);
+            for (int tile : BOARD[i]) {
+                ROW_SCORE[i] += tile != EMPTY_TILE_KEY ? tile : (hasNoEmpty = 0);
             }
 
-            // checks whether player X has won
-            if (rowSum == BOARD_DIMENSIONS) {
-                return 1;
+            // if the method is set to consider empty tiles
+            // and there was an empty tile in the row...
+            if (considerEmpty && hasNoEmpty == 0) {
+                // sets the row score along that row to be negative
+                ROW_SCORE[i] = EMPTY_TILE_KEY;
             }
-            // checks whether player O has won
-            if (rowSum == 0 && hasNoEmpty != 0) {
-                return 0;
-            }
+
         }
 
-        // no player has won yet
-        return -1;
+        // returns the player score along the rows
+        return ROW_SCORE;
     }
 
     /**
-     * <h2>rowWiningCondition</h2>
-     * <p>Checks weather a player has won along the columns</p>
-     * @return which player has won or if none has won
+     * <h2>columnScore</h2>
+     * <p>The player's score along the columns</p>
+     * @param considerEmpty whether the method considers empty tiles or not
+     * @return the score of the player along the columns
      */
-    private int columnWinConditions() {
+    protected int[] columnScore(boolean considerEmpty) {
+
+        // how close the player is to wining on each column
+        final int[] COLUMN_SCORE = new int[BOARD_DIMENSIONS];
+        Arrays.fill(COLUMN_SCORE, 0);
+
+        // verifies there are no empty tiles in the column
+        int hasNoEmpty = 1;
+
         // checks columns for alignment
-        for (int i = 0; i < board[0].length; i++) {
+        for (int i = 0; i < BOARD[0].length; i++) {
 
-            // resets the column sum for each new column
-            int columnSum = 0;
-            // verifies that no empty tiles are counted in the sum
-            int hasNoEmpty = 1;
-
-            // adds up every tile in the column
-            for (int[] row: board) {
-                columnSum = row[i] != -1 ? columnSum + row[i] : (hasNoEmpty = 0);
+            // adds up every tile in the column, ignoring empty tiles
+            for (int[] row: BOARD) {
+                COLUMN_SCORE[i] += row[i] != EMPTY_TILE_KEY ? row[i] : (hasNoEmpty = 0);
             }
 
-            // checks whether player X has won
-            if (columnSum == BOARD_DIMENSIONS) {
-                return 1;
+            // if the method is set to consider empty tiles
+            // and there was an empty tile in the row...
+            if (considerEmpty && hasNoEmpty == 0) {
+                // sets the column score along that column to be negative
+                COLUMN_SCORE[i] = EMPTY_TILE_KEY;
             }
-            // checks whether player O has won
-            if (columnSum == 0 && hasNoEmpty != 0) {
-                return 1;
-            }
+
         }
 
-        // no player has won yet
-        return -1;
+        // returns the player score along the columns
+        return COLUMN_SCORE;
     }
 
     /**
-     * <h2>rowWiningCondition</h2>
-     * <p>Checks weather a player has won along the downward diagonal</p>
-     * @return which player has won or if none has won
+     * <h2>downDiagScore</h2>
+     * <p>The player's score along the downwards diagonal</p>
+     * @param considerEmpty whether the method considers empty tiles or not
+     * @return the score of the player along the downwards diagonal
      */
-    private int downwardDiagonalWinConditions() {
-        // checks downward diagonal for alignment
-        int diagonalSumDown = 0;
-        // verifies that no empty tiles are counted in the sum
+    protected int[] downDiagScore(boolean considerEmpty) {
+
+        // how close the player is to wining along the diagonals
+        final int[] DIAGONAL_SCORE = new int[1];
+
+        // verifies there are no empty tiles in downward diagonal
         int hasNoEmpty = 1;
 
         // adds up every tile in the downwards diagonal
         for (int i = 0; i < BOARD_DIMENSIONS; i++) {
-            diagonalSumDown += board[i][i];
-            hasNoEmpty = board[i][i] == -1 ? 0 : 1;
-        }
-        // checks whether player X has won
-        if (diagonalSumDown == BOARD_DIMENSIONS) {
-            return 1;
-        }
-        // checks whether player O has won
-        if (diagonalSumDown == 0 && hasNoEmpty != 0){
-            return 0;
+            DIAGONAL_SCORE[0] += BOARD[i][i] != EMPTY_TILE_KEY ? BOARD[i][i] : (hasNoEmpty = 0);
         }
 
-        // no player has won yet
-        return -1;
+        // if the method is set to consider empty tiles
+        // and there is an empty tile in the diagonal
+        if (considerEmpty && hasNoEmpty == 0) {
+            // sets the diagonal score to be negative
+            DIAGONAL_SCORE[0] = EMPTY_TILE_KEY;
+        }
+
+        return DIAGONAL_SCORE;
     }
 
     /**
-     * <h2>rowWiningCondition</h2>
-     * <p>Checks weather a player has won along the upward diagonal</p>
-     * @return which player has won or if none has won
+     * <h2>upDiagScore</h2>
+     * <p>The player's score along the upwards diagonal</p>
+     * @param considerEmpty whether the method considers empty tiles or not
+     * @return the score of the player along the upwards diagonal
      */
-    private int upwardDiagonalWinConditions() {
+    protected int[] upDiagScore(boolean considerEmpty) {
 
-        // checks upward diagonal for alignment
-        int diagonalSumUp = 0;
-        // verifies that no empty tiles are counted in the sum
+        // how close the player is to wining along the upwards diagonal
+        final int[] DIAGONAL_SCORE = new int[1];
+
+        // verifies that there are no empty tiles along the diagonal
         int hasNoEmpty = 1;
 
-        // adds up every tile in the downwards diagonal
+        // adds up every tile in the upwards diagonal
         for (int i = 0; i < BOARD_DIMENSIONS; i++) {
-            diagonalSumUp += board[i][BOARD_DIMENSIONS - 1 - i];
-            hasNoEmpty = board[i][BOARD_DIMENSIONS - 1 - i]== -1 ? 0 : 1;
-        }
-        // checks whether player X has won
-        if (diagonalSumUp == BOARD_DIMENSIONS) {
-            return 1;
-        }
-        // checks whether player O has won
-        if (diagonalSumUp == 0 && hasNoEmpty != 0){
-            return 0;
+
+            // gets the current tile
+            int curTile = BOARD[i][BOARD_DIMENSIONS - 1 - i];
+            // if it is not empty, adds it to the diagonal score
+            DIAGONAL_SCORE[0] += curTile != EMPTY_TILE_KEY ? curTile : (hasNoEmpty = 0);
+
         }
 
-        // no player has won yet
-        return -1;
+        // if the method is set to consider empty tiles
+        // and there is an empty tile along the diagonal...
+        if (considerEmpty && hasNoEmpty == 0) {
+            // sets the diagonal score to be negative
+            DIAGONAL_SCORE[0] = EMPTY_TILE_KEY;
+        }
+
+        // returns the player's score along the downwards diagonal
+        return DIAGONAL_SCORE;
     }
 
     /**
@@ -367,7 +543,7 @@ class Board {
 
         // converts each row to a string
         for (int i = 0; i < BOARD_DIMENSIONS; i++) {
-            for (int j = 0; j < board[0].length; j++) {
+            for (int j = 0; j < BOARD[0].length; j++) {
                 // gets the values of each tile and separates them
                 boardStringRows[i] += convertTile(i, j) + " ";
             }

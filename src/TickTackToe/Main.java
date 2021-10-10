@@ -10,7 +10,12 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         int boardDimensions = 0;
-        int x = 0, y = 0;
+        int x, y;
+        int winingPlayer;
+
+        final int EMPTY_TILE_KEY = 0;
+        final int PLAYER_O_KEY   = -1;
+        final int PLAYER_X_KEY   = 1;
 
         // while the user hasn't enter correct board dimensions (>= 3)...
         do {
@@ -26,11 +31,16 @@ public class Main {
         } while (boardDimensions < 3);
 
         // creates singleton instance of board
-        Board testBoard = Board.getBoard_Instance(boardDimensions);
+        Board testBoard = Board.getBoardInstance(boardDimensions, EMPTY_TILE_KEY, PLAYER_O_KEY, PLAYER_X_KEY);
 
         // displays board
         System.out.println(testBoard);
-        System.out.println("");
+        System.out.println();
+
+        // loop conditions
+        boolean playerXHasWon = false;
+        boolean playerOHasWon = false;
+        boolean isSpaceLeft = true;
 
         // while none of the player has won and there are still empty tiles...
         gameLoop : do {
@@ -64,8 +74,16 @@ public class Main {
 
             // displays the board
             System.out.println(testBoard);
-            System.out.println("");
+            System.out.println();
 
-        } while (!testBoard.hasPlayerXWon() && !testBoard.hasPlayerOWon() && testBoard.hasSpaceLeft());
+            // determines the currently wining player
+            winingPlayer = testBoard.winingPlayer();
+
+            // determines loop conditions
+            playerXHasWon = testBoard.hasPlayerXWon(winingPlayer);
+            playerOHasWon = testBoard.hasPlayerOWon(winingPlayer);
+            isSpaceLeft = testBoard.hasSpaceLeft();
+
+        } while (!playerXHasWon && !playerOHasWon && isSpaceLeft);
     }
 }
