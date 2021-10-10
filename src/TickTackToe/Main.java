@@ -10,7 +10,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         int boardDimensions = 0;
-        int x, y;
+        int x = -1, y = -1;
         int winingPlayer;
 
         final int EMPTY_TILE_KEY = 0;
@@ -38,12 +38,12 @@ public class Main {
         System.out.println();
 
         // loop conditions
-        boolean playerXHasWon = false;
-        boolean playerOHasWon = false;
-        boolean isSpaceLeft = true;
+        boolean playerXHasWon;
+        boolean playerOHasWon;
+        boolean isSpaceLeft;
 
         // while none of the player has won and there are still empty tiles...
-        gameLoop : do {
+        do {
 
             // asks the user for the pawn's coordinates...
             do {
@@ -59,11 +59,9 @@ public class Main {
                     // gets the y coordinates
                     System.out.print("y : ");
                     y = sc.nextInt();
-                } catch (InputMismatchException e) {
+                } catch (InputMismatchException e) { // if user input is not an integer
                     // clears the input stream
                     sc.next();
-                    // asks the user again for the coordinates
-                    continue gameLoop;
                 }
 
             // ...until the coordinates are valid
