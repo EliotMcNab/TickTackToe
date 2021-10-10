@@ -3,10 +3,9 @@ package TickTackToe;
 import java.util.*;
 
 /**
- * <h1>Board</h1>
- * <p>Represents a Tick Tack Toe board</p>
+ * Represents a Tick Tack Toe board
  */
-class Board {
+public class Board {
 
     // the board in matrix form
     // BY DEFAULT
@@ -32,8 +31,7 @@ class Board {
     protected static Board board_Instance = null;
 
     /**
-     * <h2>Board Constructor</h2>
-     * <p>Called only once to create the singleton of the Board class</p>
+     * Called only once to create the singleton of the Board class
      * @param dimension the size of the board
      */
     protected Board(int dimension) {
@@ -60,19 +58,16 @@ class Board {
 
 
     /**
-     * <h2>Board Constructor</h2>
-     * <p>Called only once to create the singleton of the Board class</p>
-     * <p>
-     *     <br>
-     *     Valid Key Combination :
-     *     <br>
-     *     {empty tile key, player O key, player X key}
-     * </p>
-     * <list>
-     *      <li>-1, 0, 1</li>
-     *      <li>0, -1, 1</li>
-     *      <li>0, 1, -1</li>
-     * </list>
+     * Called only once to create the singleton of the Board class
+     * <br>
+     * Valid Key Combination :
+     * <br>
+     * {empty tile key, player O key, player X key}
+     * <ul>
+     *      <li>-1, 0, 1
+     *      <li>0, -1, 1
+     *      <li>0, 1, -1
+     * </ul>
      * @param dimension the size of the board
      * @param EMPTY_TILE_KEY integer representing empty tiles in the board
      * @param PLAYER_O_KEY integer representing player X in the board
@@ -121,8 +116,7 @@ class Board {
     }
 
     /**
-     * <h2>getBoardInstance</h2>
-     * <p>Gets the singleton instance of the Board class</p>
+     * Gets the singleton instance of the Board class
      * @param dimension the size of the board
      * @return the singleton of the Board class
      */
@@ -138,19 +132,16 @@ class Board {
     }
 
     /**
-     * <h2>getBoardInstance</h2>
-     * <p>Gets the singleton instance of the Board class</p>
-     * <p>
-     *     <br>
-     *     Valid Key Combination :
-     *     <br>
-     *     {empty tile key, player O key, player X key}
-     * </p>
-     * <list>
-     *      <li>-1, 0, 1</li>
-     *      <li>0, -1, 1</li>
-     *      <li>0, 1, -1</li>
-     * </list>
+     * Gets the singleton instance of the Board class
+     * <br>
+     * Valid Key Combination :
+     * <br>
+     * {empty tile key, player O key, player X key}
+     * <ul>
+     *      <li>-1, 0, 1
+     *      <li>0, -1, 1
+     *      <li>0, 1, -1
+     * </ul>
      * @param dimension the size of the board
      * @param EMPTY_TILE_KEY integer representing empty tiles in the board
      * @param PLAYER_O_KEY integer representing player X in the board
@@ -169,24 +160,21 @@ class Board {
     }
 
     /**
-     * <h2>nextTurn</h2>
-     * <p>moves on to the next turn</p>
+     * moves on to the next turn
      */
     public void nextTurn() {
         turn++;
     }
 
     /**
-     * <h2>resetTurns</h2>
-     * <p>Resets the turn to 0</p>
+     * Resets the turn to 0
      */
     public void resetTurns() {
         turn = 0;
     }
 
     /**
-     * <h2>curPlayer</h2>
-     * <p>Determines the current player to display him under string form</p>
+     * Determines the current player
      * @return the current player in string form
      */
     public String curPlayer() {
@@ -195,12 +183,11 @@ class Board {
     }
 
     /**
-     * <h2>curPlayerTurn</h2>
-     * <p>Determines whose player it is the turn to play</p>
-     * <list>
-     *     <li>0 : player O's turn (odd turns)</li>
-     *     <li>1 : player X's turn (even turns)</li>
-     * </list>
+     * Determines whose player it is the turn to play
+     * <ul>
+     *     <li>0 : player O's turn (odd turns)
+     *     <li>1 : player X's turn (even turns)
+     * </ul>
      * @return the player whose turn it is to play
      */
     private int curPlayerTurn() {
@@ -215,8 +202,7 @@ class Board {
     }
 
     /**
-     * <h2>isPlayableTile</h2>
-     * <p>Determines whether or not a tile on the board is playable (if it is empty)</p>
+     * Determines whether a tile on the board is playable (i.e. :if it is empty)
      * @param x the x-coordinates of the tile
      * @param y the y-coordinates of the tile
      * @return whether the tile is playable
@@ -234,8 +220,7 @@ class Board {
     }
 
     /**
-     * <h2>convertTile</h2>
-     * <p>Converts a tile into string form</p>
+     * Converts a tile into string form
      * @param x the x-coordinates of the tile
      * @param y the y-coordinates of the tile
      * @return the tile under string form
@@ -264,8 +249,7 @@ class Board {
     }
 
     /**
-     * <h2>play</h2>
-     * <p>Allows the player whose turn it is to place a pawn on the board</p>
+     * Allows the player whose turn it is to place a pawn on the board
      * @param x the x-coordinates of the pawn
      * @param y the y-coordinates of the pawn
      */
@@ -280,8 +264,7 @@ class Board {
     }
 
     /**
-     * <h2>hasPlayerXWon</h2>
-     * <p>Determines whether or not the player X has made a valid alignment</p>
+     * Determines whether the player X has made a valid alignment
      * @param winingPlayer the wining player in integer form
      * @return whether player X has won
      */
@@ -291,8 +274,7 @@ class Board {
     }
 
     /**
-     * <h2>hasPlayerOWon</h2>
-     * <p>Determines whether or not the player O has made a valid alignment</p>
+     * Determines whether the player O has made a valid alignment
      * @param winingPlayer the wining player in integer form
      * @return whether player O has won
      */
@@ -302,8 +284,7 @@ class Board {
     }
 
     /**
-     * <h2>hasSpaceLeft</h2>
-     * <p>Checks the board for any empty tiles</p>
+     * Checks the board for any empty tiles
      * @return whether the board still has empty tiles
      */
     public boolean hasSpaceLeft() {
@@ -323,12 +304,11 @@ class Board {
     }
 
     /**
-     * <h2>winCondition</h2>
-     * <p>Checks for win conditions for both players</p>
+     * Checks for win conditions for both players
      * <ul>
-     *     <li>-1 : no player has won</li>
-     *     <li> 0 : player O has won</li>
-     *     <li> 1 : player X has won</li>
+     *     <li>-1 : no player has won
+     *     <li> 0 : player O has won
+     *     <li> 1 : player X has won
      * </ul>
      * @return which player has won or if none has won
      */
@@ -365,8 +345,7 @@ class Board {
     }
 
     /**
-     * <h2>isWInning</h2>
-     * <p>Checks whether a player is wining based on his specified score</p>
+     * Checks whether a player is wining based on his specified score
      * @param score the player's score along the rows / columns / up or down diagonal
      * @return whether a player has won
      */
@@ -391,8 +370,7 @@ class Board {
 
 
     /**
-     * <h2>rowScore</h2>
-     * <p>The player's score along the rows</p>
+     * The player's score along the rows
      * @param considerEmpty whether the method considers empty tiles or not
      * @return the score of the player along the rows
      */
@@ -427,8 +405,7 @@ class Board {
     }
 
     /**
-     * <h2>columnScore</h2>
-     * <p>The player's score along the columns</p>
+     * The player's score along the columns
      * @param considerEmpty whether the method considers empty tiles or not
      * @return the score of the player along the columns
      */
@@ -463,8 +440,7 @@ class Board {
     }
 
     /**
-     * <h2>downDiagScore</h2>
-     * <p>The player's score along the downwards diagonal</p>
+     * The player's score along the downwards diagonal
      * @param considerEmpty whether the method considers empty tiles or not
      * @return the score of the player along the downwards diagonal
      */
@@ -492,8 +468,7 @@ class Board {
     }
 
     /**
-     * <h2>upDiagScore</h2>
-     * <p>The player's score along the upwards diagonal</p>
+     * The player's score along the upwards diagonal
      * @param considerEmpty whether the method considers empty tiles or not
      * @return the score of the player along the upwards diagonal
      */
@@ -527,8 +502,7 @@ class Board {
     }
 
     /**
-     * <h2>toString</h2>
-     * <p>Used to specify conversion of the board to a string</p>
+     * Used to specify conversion of the board to a string
      * @return the board under string format
      */
     @Override
