@@ -1,4 +1,4 @@
-package TickTackToe;
+import TickTackToe.TickTackToe;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -31,7 +31,7 @@ public class Main {
         } while (boardDimensions < 3);
 
         // creates singleton instance of board
-        Board testBoard = Board.getBoardInstance(boardDimensions, EMPTY_TILE_KEY, PLAYER_O_KEY, PLAYER_X_KEY);
+        TickTackToe testBoard = TickTackToe.getTickTackToe_Instance(boardDimensions, EMPTY_TILE_KEY, PLAYER_O_KEY, PLAYER_X_KEY);
 
         // displays board
         System.out.println(testBoard);

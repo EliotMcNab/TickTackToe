@@ -1,19 +1,19 @@
+/*
 package TickTackToe;
 
-import java.util.Arrays;
-
-public class AI extends Board{
+public class AI extends TickTackToe {
 
     private static AI ai_Instance;
 
-    /**
+    */
+/**
      * <h2>AI Constructor</h2>
      * <p>Called only once to create the singleton of the Board class</p>
      *
      * @param dimension the size of the board
-     */
-    protected AI(int dimension) {
-        super(dimension);
+     *//*
+
+    private AI(int dimension) {
 
     }
 
@@ -25,3 +25,4 @@ public class AI extends Board{
         return ai_Instance;
     }
 }
+*/
